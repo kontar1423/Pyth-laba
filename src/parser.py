@@ -1,6 +1,6 @@
 class Parser():
     def __init__(self, text):
-        self.text = text
+        self.text = text.replace(' ', '')
         self.pos = 0
 
     def peek(self):
