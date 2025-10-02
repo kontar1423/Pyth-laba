@@ -1,9 +1,8 @@
-# Lab1 - Python Calculator Parser
+# PYTH-LABA - Python Calculator Parser
 
 ## Структура проекта
 - src/ — исходники
 - tests/ — тесты
-- report.pdf — отчет
 - requirements.txt — зависимости
 
 ## Запуск
