@@ -1,7 +1,15 @@
-from parser import Parser
-def main():
-    print('Введите выражение')
-    p = Parser(input())
-    print(p.expr())
+from src.m3calc import calc
+
+def main() -> None:
+    try:
+        while True:
+            expr = input("Enter expression (example: ( --2 3 + ): ")
+            try:
+                result = calc(expr)
+                print("Result:", result)
+            except Exception as error:
+                print("Error:", error)
+    except KeyboardInterrupt:
+        print("\nCalculator stoped.")
 if __name__ == "__main__":
     main()
