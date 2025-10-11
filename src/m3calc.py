@@ -17,7 +17,7 @@ def calc(expr):
         if token == '(':
             state += 1
             continue
-        try:
+        try: # checking is_number
             float(token.lstrip('-+')) # lstrip прикольная штука, жаль раньше не узнал о ней
             operator = '+-'
             num = token.lstrip('-+')
@@ -28,7 +28,7 @@ def calc(expr):
             if len(stack) < 2:
                 raise ValueError("Not enough numbers for operation")
             right = stack.pop()
-            left= stack.pop()
+            left= stack.pop()   # poping numbers in stack
             if token == '+':
                 stack.append(left + right)
                 if state >= 0:
