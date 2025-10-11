@@ -3,7 +3,7 @@ from src.m3calc import calc
 def main() -> None:
     try:
         while True:
-            expr = input("Enter expression (example: ( --2 3 + ): ")
+            expr = input("Enter expression. Example: ( --2 3 + ): ")
             try:
                 result = calc(expr)
                 print("Result:", result)

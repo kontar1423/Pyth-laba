@@ -1,9 +1,9 @@
 import unittest
 from src.m3calc import calc
 
-class TestCalculator(unittest.TestCase):
+class TestCalc(unittest.TestCase):
 
-    def test_addition(self):
+    def test_sum(self):
         self.assertAlmostEqual(calc("2 3 +"), 5.0)
 
     def test_subtraction(self):
@@ -15,32 +15,32 @@ class TestCalculator(unittest.TestCase):
     def test_division(self):
         self.assertAlmostEqual(calc("10 2 /"), 5.0)
 
-    def test_unary_minus(self):
+    def test_unare_minus(self):
         self.assertAlmostEqual(calc("-3 4 +"), 1.0)
 
-    def test_unary_plus(self):
+    def test_unare_plus(self):
         self.assertAlmostEqual(calc("+3 2 +"), 5.0)
 
-    def test_double_minus(self):
+    def test_double_unare_minus(self):
         self.assertAlmostEqual(calc("--2 3 +"), 5.0)
 
-    def test_simple_parentheses(self):
+    def test_basic_brackets(self):
         self.assertAlmostEqual(calc("( 3 4 + )"), 7.0)
 
-    def test_nested_parentheses(self):
+    def test_double_brackets(self):
         self.assertAlmostEqual(calc("( 2 3 + ) ( 4 5 + ) *"), 45.0)
 
-    def test_empty_parentheses(self):
+    def test_empty_brackets(self):
         with self.assertRaises(ValueError) as cm:
             calc("( ( ) 3 4 + )")
         self.assertEqual(str(cm.exception), "Empty brackets")
 
-    def test_unbalanced_parentheses(self):
+    def test_wrong_brackets(self):
         with self.assertRaises(ValueError) as cm:
             calc("( 2 3 +")
         self.assertEqual(str(cm.exception), "Wrong input with ()")
 
-    def test_unknown_operator(self):
+    def test_unknown_operand(self):
         with self.assertRaises(ValueError) as cm:
             calc("2 3 ^")
         self.assertEqual(str(cm.exception), "Unknown operand: ^")
@@ -50,10 +50,10 @@ class TestCalculator(unittest.TestCase):
             calc("2 +")
         self.assertEqual(str(cm.exception), "Not enough numbers for operation")
 
-    def test_leftover_elements(self):
+    def test_left_elements(self):
         with self.assertRaises(ValueError) as cm:
             calc("2 3 4 +")
-        self.assertEqual(str(cm.exception), "Invalid expression: leftover elements in stack")
+        self.assertEqual(str(cm.exception), "More than 1 numbers in stack left")
 
     def test_division_by_zero(self):
         with self.assertRaises(ZeroDivisionError) as cm:

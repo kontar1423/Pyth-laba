@@ -1,19 +1,3 @@
-def is_number(token):
-    # is this number
-    try:
-        float(token)
-        return True
-    except ValueError:
-        return False
-
-def parse_unare_minus(token):
-    # do --2 to 2
-    operator = '+-'
-    num = token.lstrip('-+')
-    token = token.replace('+','--')
-    return float(operator[token.count('-')%2]+num)
-
-
 def calc(expr):
     # Calc expression
     stack = []
@@ -21,7 +5,7 @@ def calc(expr):
     state = 0 # for () proccesing
     brackets_stack = [] # for empty brackets detecting
     for token in tokens:
-        if token in ')':
+        if token == ')':
             if state == 0:
                 raise ValueError('Wrong input with ()')
             if len(brackets_stack) == 0:
@@ -30,12 +14,17 @@ def calc(expr):
             if state == 0:
                 brackets_stack = []
             continue
-        if token in '(':
+        if token == '(':
             state += 1
             continue
-        if is_number(token.lstrip('-+')):
-            stack.append(parse_unare_minus(token))
-        else:
+        try:
+            float(token.lstrip('-+')) # lstrip прикольная штука, жаль раньше не узнал о ней
+            operator = '+-'
+            num = token.lstrip('-+')
+            num_with_minuses = token.replace('+','--')
+            final_num = float(operator[num_with_minuses.count('-')%2]+num) # proccesing unare minus
+            stack.append(final_num)
+        except ValueError:
             if len(stack) < 2:
                 raise ValueError("Not enough numbers for operation")
             right = stack.pop()
@@ -62,7 +51,7 @@ def calc(expr):
                 raise ValueError(f"Unknown operand: {token}")
 
     if len(stack) != 1:
-        raise ValueError("Invalid expression: leftover elements in stack")
+        raise ValueError("More than 1 numbers in stack left")
     if state != 0:
         raise ValueError('Wrong input with ()')
     return stack[0]

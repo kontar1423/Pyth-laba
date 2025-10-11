@@ -28,7 +28,7 @@
 Запуск из командной строки:
 
 ```bash
-python src/main.py
+python -m src.main
 ```
 Пример ввода:
 
