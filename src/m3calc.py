@@ -32,6 +32,8 @@ class Calculator:
             result = left - right
         elif token == '*':
             result = left * right
+        elif token == '**':
+            result = left ** right
         elif token == '/':
             if right == 0:
                 raise ZeroDivisionError("Cannot divide by zero")
