@@ -10,9 +10,8 @@ class Calculator:
             float(token.lstrip('-+'))  # lstrip прикольная штука, жаль раньше не узнал о ней
             operator = '+-'
             num = token.lstrip('-+')
-            num_with_minuses = token.replace('+','--')
             # processing unary minus
-            final_num = float(operator[num_with_minuses.count('-')%2]+num)
+            final_num = float(operator[token.count('-')%2]+num)
             self.stack.append(final_num)
             # Добавляем в brackets_stack только если мы внутри скобок
             if self.state > 0:
