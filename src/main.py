@@ -1,4 +1,4 @@
-from src.m3calc import calc
+from src.m3calc import Calculator
 
 def main() -> None:
     try:
@@ -8,8 +8,8 @@ def main() -> None:
                 print("Calculator stoped.")
                 break
             try:
-                result = calc(expr)
-                print("Result:", result)
+                result = Calculator()
+                print("Result:", result.calc(expr))
             except Exception as error:
                 print("Error:", error)
     except KeyboardInterrupt:

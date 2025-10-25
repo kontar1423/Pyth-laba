@@ -1,57 +1,80 @@
-def calc(expr):
-    # Calc expression
-    stack = []
-    tokens = expr.split()
-    state = 0 # for () proccesing
-    brackets_stack = [] # for empty brackets detecting
-    for token in tokens:
-        if token == ')':
-            if state == 0:
-                raise ValueError('Wrong input with ()')
-            if len(brackets_stack) == 0:
-                raise ValueError('Empty brackets')
-            state -= 1
-            if state == 0:
-                brackets_stack = []
-            continue
-        if token == '(':
-            state += 1
-            continue
-        try: # checking is_number
-            float(token.lstrip('-+')) # lstrip прикольная штука, жаль раньше не узнал о ней
+class Calculator:
+    def __init__(self):
+        self.stack = []
+        self.state = 0  # for () processing
+        self.brackets_stack = []  # for empty brackets detecting
+
+    def _process_number(self, token):
+        # checking is_number
+        try:
+            float(token.lstrip('-+'))  # lstrip прикольная штука, жаль раньше не узнал о ней
             operator = '+-'
             num = token.lstrip('-+')
             num_with_minuses = token.replace('+','--')
-            final_num = float(operator[num_with_minuses.count('-')%2]+num) # proccesing unare minus
-            stack.append(final_num)
+            # processing unary minus
+            final_num = float(operator[num_with_minuses.count('-')%2]+num)
+            self.stack.append(final_num)
+            # Добавляем в brackets_stack только если мы внутри скобок
+            if self.state > 0:
+                self.brackets_stack.append(final_num)
+            return True
         except ValueError:
-            if len(stack) < 2:
-                raise ValueError("Not enough numbers for operation")
-            right = stack.pop()
-            left= stack.pop()   # poping numbers in stack
-            if token == '+':
-                stack.append(left + right)
-                if state >= 0:
-                    brackets_stack.append(left + right)
-            elif token == '-':
-                stack.append(left - right)
-                if state >= 0:
-                    brackets_stack.append(left - right)
-            elif token == '*':
-                stack.append(left * right)
-                if state >= 0:
-                    brackets_stack.append(left * right)
-            elif token == '/':
-                if right == 0:
-                    raise ZeroDivisionError("Cannot divide by zero")
-                stack.append(left / right)
-                if state >= 0:
-                    brackets_stack.append(left / right)
-            else:
-                raise ValueError(f"Unknown operand: {token}")
+            return False
 
-    if len(stack) != 1:
-        raise ValueError("More than 1 numbers in stack left")
-    if state != 0:
-        raise ValueError('Wrong input with ()')
-    return stack[0]
+    def _process_operator(self, token):
+        if len(self.stack) < 2:
+            raise ValueError("Not enough numbers for operation")
+        right = self.stack.pop()
+        left = self.stack.pop()   # poping numbers in stack
+        
+        if token == '+':
+            result = left + right
+        elif token == '-':
+            result = left - right
+        elif token == '*':
+            result = left * right
+        elif token == '/':
+            if right == 0:
+                raise ZeroDivisionError("Cannot divide by zero")
+            result = left / right
+        else:
+            raise ValueError(f"Unknown operand: {token}")
+        
+        self.stack.append(result)
+
+    def _process_brackets(self, token):
+        if token == ')':
+            if self.state == 0:
+                raise ValueError('Wrong input with ()')
+            if len(self.brackets_stack) == 0:
+                raise ValueError('Empty brackets')
+            self.state -= 1
+            if self.state == 0:
+                self.brackets_stack = []
+            return True
+        if token == '(':
+            self.state += 1
+            return True
+        return False
+
+    def calc(self, expr):
+        # Calc expression
+        tokens = expr.split()
+        
+        for token in tokens:
+            # Try processing brackets first
+            if self._process_brackets(token):
+                continue
+                
+            # Try processing number
+            if self._process_number(token):
+                continue
+                
+            # If not bracket and not number - process operator
+            self._process_operator(token)
+
+        if len(self.stack) != 1:
+            raise ValueError("More than 1 numbers in stack left")
+        if self.state != 0:
+            raise ValueError('Wrong input with ()')
+        return self.stack[0]
