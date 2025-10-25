@@ -4,6 +4,9 @@ def main() -> None:
     try:
         while True:
             expr = input("Enter expression. Example: ( --2 3 + ): ")
+            if expr == 'exit':
+                print("Calculator stoped.")
+                break
             try:
                 result = calc(expr)
                 print("Result:", result)
